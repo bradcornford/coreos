@@ -1,0 +1,152 @@
+---
+ignition:
+  config: {}
+  timeouts: {}
+networkd: {}
+passwd:
+  groups:
+  - name: brad
+    gid: 15000
+    system: false
+storage:
+  files:
+  - filesystem: root
+    path: "/opt/bootstrap/environment.sh"
+    mode: 493
+    contents:
+      local: environment.sh
+  - filesystem: root
+    path: "/opt/bootstrap/filesystem.sh"
+    mode: 493
+    contents:
+      local: filesystem.sh
+  - filesystem: root
+    path: "/etc/systemd/system/media-storage.mount.d/base.conf"
+    mode: 420
+    contents:
+      inline: |
+        [Unit]
+        Requires = media-temp.mount
+        After = media-temp.mount
+  - filesystem: root
+    path: "/etc/systemd/system/media-storage-archive.mount.d/base.conf"
+    mode: 420
+    contents:
+      inline: |
+        [Unit]
+        Requires = media-storage-archive.mount
+        After = media-storage-archive.mount
+  directories:
+  - filesystem: root
+    mode: 493
+    path: "/media/temp/"
+    user:
+      id: 15000
+    group:
+      id: 15000
+  - filesystem: root
+    mode: 493
+    path: "/opt/containers/"
+    user:
+      id: 15000
+    group:
+      id: 15000
+  - filesystem: root
+    mode: 493
+    path: "/opt/bootstrap/"
+  - filesystem: root
+    mode: 493
+    path: "/etc/sysconfig/"
+  - filesystem: root
+    mode: 493
+    path: "/etc/systemd/system/docker.service.d/"
+systemd:
+  units:
+  - name: media-temp.mount
+    enable: true
+    contents: |-
+      [Mount]
+      What=/mnt/drive1
+      Where=/media/temp
+      Type=none
+      Options=bind
+
+      [Install]
+      WantedBy=local-fs.target
+  - name: media-storage-archive.mount
+    enable: true
+    contents: |-
+      [Mount]
+      What=/mnt/drive2
+      Where=/media/storage/archvie
+      Type=none
+      Options=bind
+
+      [Install]
+      WantedBy=local-fs.target
+  - name: media-storage-series.mount
+    enable: true
+    contents: |-
+      [Unit]
+      Description=Media Storage Series Mount
+      After=mnt-nas1.mount
+      Requires=network.target mnt-nas1.mount
+      ConditionPathIsMountPoint=/mnt/nas1
+
+      [Mount]
+      What=/mnt/nas1
+      Where=/media/storage/series
+      Type=none
+      Options=bind
+
+      [Install]
+      WantedBy=multi-user.target
+  - name: media-storage-movies.mount
+    enable: true
+    contents: |-
+      [Unit]
+      Description=Media Storage Movies Mount
+      After=mnt-nas2.mount
+      Requires=network.target mnt-nas2.mount
+      ConditionPathIsMountPoint=/mnt/nas2
+
+      [Mount]
+      What=/mnt/nas2
+      Where=/media/storage/movies
+      Type=none
+      Options=bind
+
+      [Install]
+      WantedBy=multi-user.target
+  - name: environment.service
+    enabled: true
+    contents: |-
+      [Unit]
+      Description=Generate Environmental Files
+      After=network-online.target
+      Requires=network-online.target
+
+      [Service]
+      Type=oneshot
+      ExecStart=/opt/bootstrap/environment.sh
+      RemainAfterExit=true
+      StandardOutput=journal
+
+      [Install]
+      WantedBy=multi-user.target
+  - name: filesystem.service
+    enabled: true
+    contents: |-
+      [Unit]
+      Description=Generate filesystem Structure
+      After=local-fs.target
+      Requires=local-fs.target
+
+      [Service]
+      Type=oneshot
+      ExecStart=/opt/bootstrap/filesystem.sh
+      RemainAfterExit=true
+      StandardOutput=journal
+
+      [Install]
+      WantedBy=multi-user.target

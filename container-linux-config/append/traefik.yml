@@ -1,0 +1,197 @@
+---
+ignition:
+  config: {}
+  timeouts: {}
+networkd: {}
+passwd: {}
+storage:
+  files:
+  - filesystem: root
+    path: "/opt/traefik/traefik.toml"
+    mode: 493
+    contents:
+      inline: |-
+        debug = false
+        logLevel = "ERROR"
+        InsecureSkipVerify = true
+        defaultEntryPoints = ["https", "http"]
+
+        [api]
+        entryPoint = "traefik"
+        dashboard = true
+        address = ":8080"
+        usersFile = "/etc/traefik/.htpasswd"
+
+        [entryPoints]
+          [entryPoints.http]
+            address = ":80"
+            [entryPoints.http.redirect]
+              entryPoint = "https"
+          [entryPoints.https]
+            address = ":443"
+            [entryPoints.https.tls]
+
+        [file]
+        watch = true
+        filename = "/etc/traefik/rules.toml"
+
+        [retry]
+
+        [acme]
+          email = "bradcornford@hotmail.co.uk"
+          storage = "/etc/traefik/acme.json"
+          entryPoint = "https"
+          acmeLogging = true
+          [acme.dnsChallenge]
+            provider = "godaddy"
+            delayBeforeCheck = 90
+          [[acme.domains]]
+            main = "*.bcornford.co.uk"
+            sans = ["bcornford.co.uk"]
+
+        [docker]
+        endpoint = "unix:///var/run/docker.sock"
+        domain = "bcornford.co.uk"
+        watch = true
+        exposedbydefault = false
+
+  - filesystem: root
+    path: "/opt/traefik/rules.toml"
+    mode: 493
+    contents:
+      inline: |-
+        [backends]
+          [backends.backend-router]
+            [backends.backend-router.servers]
+              [backends.backend-router.servers.server-router-ext]
+                url = "http://192.168.0.1"
+                weight = 0
+
+          [backends.backend-unificloudkey]
+            [backends.backend-unificloudkey.servers]
+              [backends.backend-unificloudkey.servers.server-unificloudkey-ext]
+                url = "https://unifi-cloudKey:8443"
+                weight = 0
+
+          [backends.backend-piserver]
+            [backends.backend-piserver.servers]
+              [backends.backend-piserver.servers.server-piserver-ext]
+                url = "http://pi-server:88/admin"
+                weight = 0
+
+          [backends.backend-dellserver]
+            [backends.backend-dellserver.servers]
+              [backends.backend-dellserver.servers.server-dellserver-ext]
+                url = "https://idrac-hm5n35j"
+                weight = 0
+
+          [backends.backend-zyxelnas]
+            [backends.backend-zyxelnas.servers]
+              [backends.backend-zyxelnas.servers.server-zyxelnas-ext]
+                url = "http://zyxel-nas"
+                weight = 0
+
+          [backends.backend-buffalonas]
+            [backends.backend-buffalonas.servers]
+              [backends.backend-buffalonas.servers.server-buffalonas-ext]
+                url = "http://buffalo-nas"
+                weight = 0
+
+        [frontends]
+          [frontends.frontend-router]
+            backend = "backend-router"
+            passHostHeader = true
+            [frontends.frontend-router.routes]
+              [frontends.frontend-router.routes.route-router-ext]
+                rule = "Host:router.bcornford.co.uk"
+            [frontends.frontend-router.auth]
+              headerField = "X-WebAuth-User"
+              [frontends.frontend-router.auth.basic]
+                removeHeader = true
+                usersFile = "/etc/traefik/.htpasswd"
+
+          [frontends.frontend-piserver]
+            backend = "backend-piserver"
+            passHostHeader = true
+            [frontends.frontend-piserver.routes]
+              [frontends.frontend-piserver.routes.route-piserver-ext]
+                rule = "Host:pihole.bcornford.co.uk"
+            [frontends.frontend-piserver.auth]
+              headerField = "X-WebAuth-User"
+              [frontends.frontend-piserver.auth.basic]
+                removeHeader = true
+                usersFile = "/etc/traefik/.htpasswd"
+
+          [frontends.frontend-unificloudkey]
+            backend = "backend-unificloudkey"
+            passHostHeader = true
+            [frontends.frontend-unificloudkey.routes]
+              [frontends.frontend-unificloudkey.routes.route-unificloudkey-ext]
+                rule = "Host:unifi.bcornford.co.uk"
+            [frontends.frontend-unificloudkey.auth]
+              headerField = "X-WebAuth-User"
+              [frontends.frontend-unificloudkey.auth.basic]
+                removeHeader = true
+                usersFile = "/etc/traefik/.htpasswd"
+
+          [frontends.frontend-dellserver]
+            backend = "backend-dellserver"
+            passHostHeader = true
+            [frontends.frontend-dellserver.routes]
+              [frontends.frontend-dellserver.routes.route-dellserver-ext]
+                rule = "Host:dell.bcornford.co.uk"
+            [frontends.frontend-dellserver.auth]
+              headerField = "X-WebAuth-User"
+              [frontends.frontend-dellserver.auth.basic]
+                removeHeader = true
+                usersFile = "/etc/traefik/.htpasswd"
+
+          [frontends.frontend-zyxelnas]
+            backend = "backend-zyxelnas"
+            passHostHeader = true
+            [frontends.frontend-zyxelnas.routes]
+              [frontends.frontend-zyxelnas.routes.route-zyxelnas-ext]
+                rule = "Host:zyxel.bcornford.co.uk"
+            [frontends.frontend-zyxelnas.auth]
+              headerField = "X-WebAuth-User"
+              [frontends.frontend-zyxelnas.auth.basic]
+                removeHeader = true
+                usersFile = "/etc/traefik/.htpasswd"
+
+          [frontends.frontend-buffalonas]
+            backend = "backend-buffalonas"
+            passHostHeader = true
+            [frontends.frontend-buffalonas.routes]
+              [frontends.frontend-buffalonas.routes.route-buffalonas-ext]
+                rule = "Host:buffalo.bcornford.co.uk"
+            [frontends.frontend-buffalonas.auth]
+              headerField = "X-WebAuth-User"
+              [frontends.frontend-buffalonas.auth.basic]
+                removeHeader = true
+                usersFile = "/etc/traefik/.htpasswd"
+  - filesystem: root
+    path: "/opt/traefik/acme.json"
+    mode: 384
+systemd:
+  units:
+  - name: traefik.service
+    enabled: true
+    contents: |-
+      [Unit]
+      Description=Traefik Container
+      After=docker.service
+      Requires=docker.service
+
+      [Service]
+      EnvironmentFile=-/etc/sysconfig/variables
+      TimeoutStartSec=0
+      Restart=unless-stopped
+      ExecStartPre=-/usr/bin/docker kill %n
+      ExecStartPre=-/usr/bin/docker rm %n
+      ExecStartPre=-/usr/bin/docker pull traefik:alpine
+      ExecStart=/usr/bin/docker run --rm --name %n -p 80:80 -p 443:443 -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock:ro -v /opt/traefik/traefik.toml:/etc/traefik/traefik.toml -v /opt/traefik/rules.toml:/etc/traefik/rules.toml -v /opt/traefik/acme.json:/etc/traefik/acme.json -v /etc/sysconfig/users:/etc/traefik/.htpasswd --env-file /etc/sysconfig/variables --label traefik.enable=true --label traefik.port=9000 --label traefik.frontend.rule=Host:traefik.bcornford.co.uk traefik:alpine
+      ExecStop=/usr/bin/docker stop -t 15 %n
+
+      [Install]
+      WantedBy=multi-user.target
+      WantedBy=docker.service

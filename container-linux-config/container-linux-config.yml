@@ -1,0 +1,131 @@
+---
+ignition:
+  config:
+    append:
+    - source: https://raw.githubusercontent.com/bradcornford/coreos/master/ignition/ignition.d/base.json
+    - source: https://raw.githubusercontent.com/bradcornford/coreos/master/ignition/ignition.d/portainer.json
+    - source: https://raw.githubusercontent.com/bradcornford/coreos/master/ignition/ignition.d/traefik.json
+    - source: https://raw.githubusercontent.com/bradcornford/coreos/master/ignition/ignition.d/netdata.json
+  timeouts: {}
+networkd: {}
+passwd:
+  users:
+  - name: core
+    ssh_authorized_keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrvtqVBYgNTghTAq74Al2Lx7uMtGUN+uTRvcvynjQTIhQd9n/8JXcPtYRN9txwXBerl7I1YQ0w22N+qSckaeeeIe6NsV1I52pJFfpnYyGzDTEpz1CpTvu/fguv24c7lhDQyuGGHdCsRpA1HUqRv8916+FaqAnso4Zr07z2ujQ/a8qfgv29MC6eaBZMOWd+4qE/SniKs/SueuWxvNh/iWRhcLY+ixackghgD5SA77RaWgY8jRO/XFnnxjOOjPvw+G+zXQVSZKcBmK4f7cH4csh8QuDOiZPU5bLdxjMTYJ2Srfri7oA6tEUchK3pBaJMdZx3LrYDRf9rm0qGgaleaKzj admin@ubnt
+  - name: brad
+    uid: 15000
+    primary_group: brad
+    no_user_group: true
+    system: false
+    ssh_authorized_keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAg9uugNZBZW5gHL3xBLOgoozVWYSjOkQpapI5w91PQny3A1wFTtWwGfKCUWxOkprZf+9BC4ohM54MOuQTD4FRsCVwRAZ37wnutyTRtkKrsXtpJrel+NXn0pCNW+jdGKdTYj8ZPyVvDglEbkHhFUKjDuVkfvjL5PhsGfMOjM9Gf2VXBw71ooXdPxcq24zgt3xwPpkC5i/H66M8c4jtz2WqpRfkk7PnmIKjeHXfiKk9HXumxUnwVzX5rJDbQJMSA4qkNruPo1ePzpSECuhHtZ05WhXsoTXkl3uVEsLqJnJEjLe4/pWS8fT0DsQBwCJcS8wNocZvzNz9SwIp+Ds1nUUJGQ== brad@hplaptop
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIeyCW1lMoVxb/A5dIyF6ue/qzB7LwZv1N84jWwLQK/8/mTUQEd/sNZBRfrl5fzaBTzsI80gBOyqMkL4FnxJXmJBheFL+cvTuyLUHv7OEy5Wp397roZkAe7KhQ5gyUyzrbcwMP6HzgKWzeyODIDNQj6yb6GaxaEd5mvT1Q9HEU65kuC7MOYbbr7b+t/50LZzrwLZRdfdM+sf/2GYZPNZatEcxuqvuSxcBjv7qFK8pZNl9O7nMzTsVaBcMzZ0fx5LHTPOvLVNxvxNpw4WDdBQ9X42834A8opMZxWM/cmXBXz+jmZuhT4El/Ljdo+0eU7q1AgZ5ILxuaVxJRiJlNqq1t brc15@OSTML0253731
+    - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAl2F7qF4qWXZT/EXb1jDb/bnjqYeVvoyjz5PUdrNYnK3aUrtKHit+eZmyovOQxNHxzu8i/B8WrjBUKoO3cuhdCDi68AETQCSaDl/dkeRZUKgLywOqLbxC5VddTQ5RzyshT7iQ6OJCKV/4Z4Fyff25l+4MdVI0i1BH/57E+do2/MSOUIslykDRZz1wIgM+9a9W1s3K1Rcj7P8fLOqUCk6KlvQIBtweynXdY/5eg3o+HSkGEhK4yZ7kOgsOkCXMxYgjog9tuje9W+jcJOD9JoqlzBdGDtdWD9cYXQPu07TDojYIKoEGqdZ2JiMCFioL0Z8UZdRO+zSfqIVTI1vdZ1HYgQ== brad@DESKTOP-H68OJ4E
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrvtqVBYgNTghTAq74Al2Lx7uMtGUN+uTRvcvynjQTIhQd9n/8JXcPtYRN9txwXBerl7I1YQ0w22N+qSckaeeeIe6NsV1I52pJFfpnYyGzDTEpz1CpTvu/fguv24c7lhDQyuGGHdCsRpA1HUqRv8916+FaqAnso4Zr07z2ujQ/a8qfgv29MC6eaBZMOWd+4qE/SniKs/SueuWxvNh/iWRhcLY+ixackghgD5SA77RaWgY8jRO/XFnnxjOOjPvw+G+zXQVSZKcBmK4f7cH4csh8QuDOiZPU5bLdxjMTYJ2Srfri7oA6tEUchK3pBaJMdZx3LrYDRf9rm0qGgaleaKzj admin@ubnt
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwl5Oq4YFnrR2kods/LoAMWgOa8KCwPJayKBjcwRj17/dP1b6YsvTrqjvEI+9FrkjeNHh6dWOr2nLzX3sXyJagcNMrgvCodRiBcp9Xve0/plpDc8qolGv6bPA7wuDG7Vlg1RDadyy3wAS1v8Dzy2OSwd82e/W1FuIB0SxDidgxyyF561jD9KFzQdkS5fy4e1z5z0tYKhecsEkV7b9N7uqpu/UduXoeQf98gYXfl1G8WsfcVs81TnPnzO3siby6T3AjqSLeg161GRRZ58KJMD0Q3/nA+k2lOtgijUna7ki1l1AZfu2k5A+uPbkF+go7FusvDOGB+H2DSInqK6B7xCoP pi@PiProxy
+    shell: "/bin/bash"
+storage:
+  directories:
+  - filesystem: root
+    mode: 493
+    path: "/mnt/drive1/"
+    user:
+      id: 15000
+    group:
+      id: 15000
+  - filesystem: root
+    mode: 493
+    path: "/mnt/drive2/"
+    user:
+      id: 15000
+    group:
+      id: 15000
+  - filesystem: root
+    mode: 493
+    path: "/mnt/nas1/"
+    user:
+      id: 15000
+    group:
+      id: 15000
+  - filesystem: root
+    mode: 493
+    path: "/mnt/nas2/"
+    user:
+      id: 15000
+    group:
+      id: 15000
+  files:
+  - filesystem: root
+    path: "/etc/systemd/system/storage.mount.d/deps.conf"
+    mode: 420
+    contents:
+      inline: |
+        [Unit]
+        Requires = mnt-drive1.mount
+        Requires = mnt-drive2.mount
+        Requires = mnt-nas1.mount
+        Requires = mnt-nas2.mount
+        After = mnt-drive1.mount
+        After = mnt-drive2.mount
+        After = mnt-nas1.mount
+        After = mnt-nas2.mount
+  - filesystem: root
+    path: "/etc/systemd/system/filesystem.service.d/folders.conf"
+    mode: 420
+    contents:
+      inline: |
+        [Service]
+        Environment="MEDIA_FOLDERS=movies music series"
+systemd:
+  units:
+  - name: mnt-drive1.mount
+    enable: true
+    contents: |-
+      [Mount]
+      What=/dev/disk/by-uuid/cbe6494b-6f2a-4fa7-802c-a692c5ba0592
+      Where=/mnt/drive1
+      Type=ext4
+
+      [Install]
+      WantedBy=local-fs.target
+  - name: mnt-drive2.mount
+    enable: true
+    contents: |-
+      [Mount]
+      What=/dev/disk/by-uuid/ea0dc24e-53d0-4932-8f05-1de783168731
+      Where=/mnt/drive2
+      Type=ext4
+
+      [Install]
+      WantedBy=local-fs.target
+  - name: mnt-nas1.mount
+    enable: true
+    contents: |-
+      [Unit]
+      Description=Zyxel NAS CIFS mount
+      After=network.target
+
+      [Mount]
+      What=//Zyxel-NAS/series
+      Where=/mnt/nas1
+      Type=cifs
+      Options=defaults,credentials=/etc/sysconfig/credentials,rw,uid=15000,gid=15000,noperm,iocharset=utf8,vers=2.0
+
+      [Install]
+      WantedBy=multi-user.target
+  - name: mnt-nas2.mount
+    enable: true
+    contents: |-
+      [Unit]
+      Description=Buffalo NAS CIFS mount
+      After=network.target
+
+      [Mount]
+      What=//Buffalo-NAS/movies
+      Where=/mnt/nas2
+      Type=cifs
+      Options=defaults,credentials=/etc/sysconfig/credentials,rw,uid=15000,gid=15000,noperm,iocharset=utf8,vers=1.0
+
+      [Install]
+      WantedBy=multi-user.target

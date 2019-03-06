@@ -1,0 +1,719 @@
+[
+  {
+    "type": 1,
+    "name": "cardigann",
+    "title": "Cardigann",
+    "description": "Cardigann, a server for adding extra indexers to Sonarr, SickRage and CouchPotato via Torznab and TorrentPotato proxies. Behind the scenes Cardigann logs in and runs searches and then transforms the results into a compatible format.",
+    "logo": "https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/img/cardigann-icon.png",
+    "image": "linuxserver/cardigann:latest",
+    "categories": [
+      "Downloaders:"
+    ],
+    "ports": [
+      "5060/tcp"
+    ],
+    "volumes": [
+      {
+        "container": "/config",
+        "bind": "/opt/containers/cardigann"
+      }
+    ],
+    "env": [
+      {
+        "name": "PGID",
+        "label": "PGID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "PUID",
+        "label": "PUID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "TZ",
+        "label": "TZ",
+        "default": "Europe/London"
+      }
+    ],
+    "labels": [
+      { "name": "traefik.enable", "value": "true" },
+      { "name": "traefik.port", "value": "5060" }
+    ]
+  },
+  {
+    "type": 1,
+    "name": "Deluge",
+    "title": "deluge",
+    "description": "Deluge is a lightweight, Free Software, cross-platform BitTorrent client providing: Full Encryption, WebUI, Plugin System, Much more...",
+    "logo": "https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/img/deluge-icon.png",
+    "image": "linuxserver/deluge:latest",
+    "network": "host",
+    "categories": [
+      "Downloaders"
+    ],
+    "volumes": [
+      {
+        "container": "/config",
+        "bind": "/opt/containers/deluge"
+      },
+      {
+        "container": "/processing",
+        "bind": "/media/temp/processing"
+      },
+      {
+        "container": "/blackhole",
+        "bind": "/media/temp/blackhole"
+      },
+      {
+        "container": "/downloads",
+        "bind": "/media/temp/downloads"
+      }
+    ],
+    "env": [
+      {
+        "name": "PGID",
+        "label": "PGID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "PUID",
+        "label": "PUID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "TZ",
+        "label": "TZ",
+        "default": "Europe/London"
+      },
+      {
+        "name": "UMASK_SET",
+        "label": "UMASK_SET",
+        "default": "000"
+      }
+    ],
+    "labels": [
+      { "name": "traefik.enable", "value": "true" },
+      { "name": "traefik.port", "value": "8112" }
+    ]
+  },
+  {
+    "type": 1,
+    "name": "jackett",
+    "title": "Jackett",
+    "description": "Jackett works as a proxy server it translates queries from apps like Sonarr etc into tracker-site-specific http queries and parses the html response sending results back to the requesting software.",
+    "logo": "https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/img/jacket-icon.png",
+    "image": "linuxserver/jackett:latest",
+    "categories": [
+      "Downloaders",
+      "Tools"
+    ],
+    "ports": [
+      "9117/tcp"
+    ],
+    "volumes": [
+      {
+        "container": "/config",
+        "bind": "/opt/containers/jackett"
+      },
+      {
+        "container": "/downloads",
+        "bind": "/media/temp/downloads"
+      },
+      {
+        "container": "/etc/localtime",
+        "bind": "/etc/localtime",
+        "readonly": true
+      }
+    ],
+    "env": [
+      {
+        "name": "PGID",
+        "label": "PGID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "PUID",
+        "label": "PUID",
+        "default": "15000",
+        "preset": true
+      }
+    ],
+    "labels": [
+      { "name": "traefik.enable", "value": "true" },
+      { "name": "traefik.port", "value": "9117" }
+    ]
+  },
+  {
+    "type": 1,
+    "name": "lidarr",
+    "title": "Lidarr",
+    "description": "Lidarr is a music collection manager for Usenet and BitTorrent users.",
+    "logo": "https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/img/lidarr-icon.png",
+    "image": "linuxserver/lidarr:latest",
+    "category": [
+      "Downloaders",
+      "MediaApp:Music"
+    ],
+    "ports": [
+      "8686/tcp"
+    ],
+    "volumes": [
+      {
+        "container": "/config",
+        "bind": "/opt/containers/lidarr"
+      },
+      {
+        "container": "/downloads",
+        "bind": "/media/temp/downloads/music"
+      },
+      {
+        "container": "/music",
+        "bind": "/media/storage/music"
+      },
+      {
+        "container": "/archvie",
+        "bind": "/media/storage/archive"
+      },
+      {
+        "container": "/blackhole",
+        "bind": "/media/temp/blackhole/music"
+      },
+      {
+        "container": "/etc/localtime",
+        "bind": "/etc/localtime",
+        "readonly": true
+      }
+    ],
+    "env": [
+      {
+        "name": "PGID",
+        "label": "PGID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "PUID",
+        "label": "PUID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "TZ",
+        "label": "TZ",
+        "default": "Europe/London"
+      }
+    ],
+    "labels": [
+      { "name": "traefik.enable", "value": "true" },
+      { "name": "traefik.port", "value": "8686" }
+    ]
+  },
+  {
+    "type": 1,
+    "name": "ombi",
+    "title": "Ombi",
+    "description": "Ombi allows you to host your own Plex Request and user management system. ",
+    "logo": "https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/img/ombi-icon.png",
+    "image": "linuxserver/ombi:latest",
+    "categories": [
+        "Downloaders",
+        "Network:Other",
+        "MediaApp:Video",
+        "Tools"
+    ],
+    "ports": [
+      "3579/tcp"
+    ],
+    "volumes": [
+      {
+        "container": "/config",
+        "bind": "/opt/containers/ombi"
+      },
+      {
+        "container": "/etc/localtime",
+        "bind": "/etc/localtime",
+        "readonly": true
+      }
+    ],
+    "env": [
+      {
+        "name": "PGID",
+        "label": "PGID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "PUID",
+        "label": "PUID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "TZ",
+        "label": "TZ",
+        "default": "Europe/London"
+      }
+    ],
+    "labels": [
+      { "name": "traefik.enable", "value": "true" },
+      { "name": "traefik.port", "value": "3579" }
+    ]
+  },
+  {
+    "type": 1,
+    "name": "plex",
+    "title": "Plex Media Server",
+    "description": "Plex organizes your video, music, and photo collections and streams them to all of your screens.",
+    "logo": "https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/img/plex-icon.png",
+    "image": "linuxserver/plex:latest",
+    "network": "host",
+    "categories": [
+      "MediaServer:Video",
+      "MediaServer:Music",
+      "MediaServer:Photos"
+    ],
+    "privileged": true,
+    "volumes": [
+      {
+        "container": "/config",
+        "bind": "/opt/containers/plex"
+      },
+      {
+        "container": "/data/series",
+        "bind": "/media/storage/series"
+      },
+      {
+        "container": "/data/movies",
+        "bind": "/media/storage/movies"
+      },
+      {
+        "container": "/data/music",
+        "bind": "/media/storage/music"
+      },
+      {
+        "container": "/data/archvie",
+        "bind": "/media/storage/archive"
+      },
+      {
+        "container": "/transcode"
+      }
+    ],
+    "env": [
+      {
+        "name": "PGID",
+        "label": "PGID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "PUID",
+        "label": "PUID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "TZ",
+        "label": "TZ",
+        "default": "Europe/London"
+      },
+      {
+        "name": "VERSION",
+        "label": "VERSION",
+        "default": "latest"
+      }
+    ],
+    "labels": [
+      { "name": "traefik.enable", "value": "true" },
+      { "name": "traefik.port", "value": "32400" }
+    ]
+  },
+  {
+    "type": 1,
+    "name": "qbittorrent",
+    "title": "qbittorrent",
+    "description": "The qBittorrent project aims to provide an open-source software alternative to \u00b5Torrent. qBittorrent is based on the Qt toolkit and libtorrent-rasterbar library.",
+    "logo": "https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/img/qbittorrent-icon.png",
+    "image": "linuxserver/qbittorrent:latest",
+    "categories": [
+      "Downloaders"
+    ],
+    "ports": [
+      "6881/tcp",
+      "6881/udp",
+      "8090/tcp"
+    ],
+    "volumes": [
+      {
+        "container": "/config",
+        "bind": "/opt/containers/qbittorrent"
+      },
+      {
+        "container": "/processing",
+        "bind": "/media/temp/processing"
+      },
+      {
+        "container": "/blackhole",
+        "bind": "/media/temp/blackhole"
+      },
+      {
+        "container": "/downloads",
+        "bind": "/media/temp/downloads"
+      }
+    ],
+    "env": [
+      {
+        "name": "PGID",
+        "label": "PGID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "PUID",
+        "label": "PUID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "TZ",
+        "label": "TZ",
+        "default": "Europe/London"
+      },
+      {
+        "name": "UMASK_SET",
+        "label": "UMASK_SET",
+        "default": "000"
+      }
+    ],
+    "labels": [
+      { "name": "traefik.enable", "value": "true" },
+      { "name": "traefik.port", "value": "8090" }
+    ]
+  },
+  {
+    "type": 1,
+    "name": "radarr",
+    "title": "Radarr",
+    "description": "Radarr - A fork of Sonarr to work with movies la Couchpotato.",
+    "logo": "https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/img/radarr-icon.png",
+    "image": "linuxserver/radarr:latest",
+    "categories": [
+      "Downloaders",
+      "MediaApp:Video"
+    ],
+    "ports": [
+      "7878/tcp"
+    ],
+    "volumes": [
+      {
+        "container": "/config",
+        "bind": "/opt/containers/radarr"
+      },
+      {
+        "container": "/downloads",
+        "bind": "/media/temp/downloads/movies"
+      },
+      {
+        "container": "/movies",
+        "bind": "/media/storage/movies"
+      },
+      {
+        "container": "/archvie",
+        "bind": "/media/storage/archive"
+      },
+      {
+        "container": "/blackhole",
+        "bind": "/media/temp/blackhole/movies"
+      },
+      {
+        "container": "/etc/localtime",
+        "bind": "/etc/localtime",
+        "readonly": true
+      }
+    ],
+    "env": [
+      {
+        "name": "PGID",
+        "label": "PGID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "PUID",
+        "label": "PUID",
+        "default": "15000",
+        "preset": true
+      }
+    ],
+    "labels": [
+      { "name": "traefik.enable", "value": "true" },
+      { "name": "traefik.port", "value": "7878" }
+    ]
+  },
+  {
+    "type": 1,
+    "name": "rutorrent",
+    "title": "ruTorrent",
+    "description": "ruTorrent is a quick and efficient BitTorrent client",
+    "logo": "https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/img/rutorrent-icon.png",
+    "image": "linuxserver/rutorrent:latest",
+    "categories": [
+      "Downloaders",
+      "Network:Other",
+      "Tools"
+    ],
+    "ports": [
+      "80/tcp",
+      "51413/tcp",
+      "6881/udp"
+    ],
+    "volumes": [
+      {
+        "container": "/config",
+        "bind": "/opt/containers/rutorrent"
+      },
+      {
+        "container": "/processing",
+        "bind": "/media/temp/processing"
+      },
+      {
+        "container": "/blackhole",
+        "bind": "/media/temp/blackhole"
+      },
+      {
+        "container": "/downloads",
+        "bind": "/media/temp/downloads"
+      }
+    ],
+    "env": [
+      {
+        "name": "PGID",
+        "label": "PGID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "PUID",
+        "label": "PUID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "TZ",
+        "label": "TZ",
+        "default": "Europe/London"
+      },
+      {
+        "name": "UMASK_SET",
+        "label": "UMASK_SET",
+        "default": "000"
+      },
+      {
+        "name": "WEBUI_PORT",
+        "label": "WEBUI_PORT",
+        "default": "9092"
+      }
+    ],
+    "labels": [
+      { "name": "traefik.enable", "value": "true" },
+      { "name": "traefik.port", "value": "80" }
+    ]
+  },
+  {
+    "type": 1,
+    "name": "sonarr",
+    "title": "Sonarr",
+    "description": "Sonarr (formerly NZBdrone) is a PVR for usenet and bittorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.",
+    "logo": "https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/img/sonarr-icon.png",
+    "image": "linuxserver/sonarr:latest",
+    "categories": [
+      "Downloaders",
+      "MediaApp:Video"
+    ],
+    "ports": [
+      "8989/tcp"
+    ],
+    "volumes": [
+      {
+        "container": "/config",
+        "bind": "/opt/containers/sonarr"
+      },
+      {
+        "container": "/downloads",
+        "bind": "/media/temp/downloads/series"
+      },
+      {
+        "container": "/tv",
+        "bind": "/media/storage/series"
+      },
+      {
+        "container": "/archvie",
+        "bind": "/media/storage/archive"
+      },
+      {
+        "container": "/blackhole",
+        "bind": "/media/temp/blackhole/series"
+      },
+      {
+        "container": "/etc/localtime",
+        "bind": "/etc/localtime",
+        "readonly": true
+      }
+    ],
+    "env": [
+      {
+        "name": "PGID",
+        "label": "PGID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "PUID",
+        "label": "PUID",
+        "default": "15000",
+        "preset": true
+      }
+    ],
+    "labels": [
+      { "name": "traefik.enable", "value": "true" },
+      { "name": "traefik.port", "value": "8989" }
+    ]
+  },
+  {
+    "type": 1,
+    "name": "tautulli",
+    "title": "Tautulli",
+    "description": "A Python based monitoring and tracking tool for Plex Media Server.",
+    "logo": "https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/img/tautulli-icon.png",
+    "image": "linuxserver/tautulli:latest",
+    "categories": [
+      "Other",
+      "Tools"
+    ],
+    "ports": [
+      "8181/tcp"
+    ],
+    "volumes": [
+      {
+        "container": "/config",
+        "bind": "/opt/containers/tautulli"
+      },
+      {
+        "container": "/logs",
+        "bind": "/opt/containers/plex/Library/Application Support/Plex MediaServer/Logs",
+        "readonly": true
+      }
+    ],
+    "env": [
+      {
+        "name": "PGID",
+        "label": "PGID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "PUID",
+        "label": "PUID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "TZ",
+        "label": "TZ",
+        "default": "Europe/London"
+      }
+    ],
+    "labels": [
+      { "name": "traefik.enable", "value": "true" },
+      { "name": "traefik.port", "value": "8181" }
+    ]
+  },
+  {
+    "type": 1,
+    "name": "transmission",
+    "title": "Transmission",
+    "description": "Transmission is designed for easy, powerful use. Transmission has the features you want from a BitTorrent client: encryption, a web interface, peer exchange, magnet links, DHT, \u00b5TP, UPnP and NAT-PMP port forwarding, webseed support, watch directories, tracker editing, global and per-torrent speed limits, and more.",
+    "logo": "https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/img/transmission-icon.png",
+    "image": "linuxserver/transmission:latest",
+    "categories": [
+      "Downloaders"
+    ],
+    "ports": [
+      "9091/tcp",
+      "51413/tcp"
+    ],
+    "volumes": [
+      {
+        "container": "/config",
+        "bind": "/opt/containers/transmission"
+      },
+      {
+        "container": "/processing",
+        "bind": "/media/temp/processing"
+      },
+      {
+        "container": "/blackhole",
+        "bind": "/media/temp/blackhole"
+      },
+      {
+        "container": "/downloads",
+        "bind": "/media/temp/downloads"
+      }
+    ],
+    "env": [
+      {
+        "name": "PGID",
+        "label": "PGID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "PUID",
+        "label": "PUID",
+        "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "TZ",
+        "label": "TZ",
+        "default": "Europe/London"
+      },
+      {
+        "name": "UMASK_SET",
+        "label": "UMASK_SET",
+        "default": "000"
+      },
+      {
+        "name": "TRANSMISSION_WEB_HOME",
+        "label": "TRANSMISSION_WEB_HOME",
+        "default": "combustion-release"
+      }
+    ],
+    "labels": [
+      { "name": "traefik.enable", "value": "true" },
+      { "name": "traefik.port", "value": "9091" }
+    ]
+  },
+  {
+    "type": 1,
+    "name": "watchtower",
+    "title": "Watchtower",
+    "description": "Automatically update running Docker containers",
+    "logo": "https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/img/watchtower-icon.png",
+    "image": "v2tec/watchtower:latest",
+    "categories": [
+      "Tools"
+    ],
+    "volumes": [
+      {
+        "container": "/var/run/docker.sock",
+        "bind": "/var/run/docker.sock"
+      }
+    ],
+    "env": []
+  }
+]

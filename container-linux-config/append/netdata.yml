@@ -1,0 +1,30 @@
+---
+ignition:
+  config: {}
+  timeouts: {}
+networkd: {}
+passwd: {}
+storage: {}
+systemd:
+  units:
+  - name: netdata.service
+    enabled: true
+    contents: |-
+      [Unit]
+      Description=Netdata Container
+      After=docker.service
+      Requires=docker.service
+
+      [Service]
+      EnvironmentFile=-/etc/sysconfig/variables
+      TimeoutStartSec=0
+      Restart=unless-stopped
+      ExecStartPre=-/usr/bin/docker kill %n
+      ExecStartPre=-/usr/bin/docker rm %n
+      ExecStartPre=-/usr/bin/docker pull netdata/netdata
+      ExecStart=/usr/bin/docker run --rm --hostname %n --name %n -p 19999:19999 -v /proc:/host/proc:ro -v /sys:/host/sys:ro -v /var/run/docker.sock:/var/run/docker.sock:ro --cap-add SYS_PTRACE --security-opt apparmor=unconfined --env PGID=${DOCKER_PGID} --label traefik.enable=true --label traefik.port=19999 --label traefik.frontend.rule=Host:netdata.bcornford.co.uk netdata/netdata
+      ExecStop=/usr/bin/docker stop -t 15 %n
+
+      [Install]
+      WantedBy=multi-user.target
+      WantedBy=docker.service

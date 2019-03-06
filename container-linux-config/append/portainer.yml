@@ -1,0 +1,34 @@
+---
+ignition:
+  config: {}
+  timeouts: {}
+networkd: {}
+passwd: {}
+storage:
+  directories:
+  - filesystem: root
+    mode: 493
+    path: "/opt/portainer/"
+systemd:
+  units:
+  - name: portainer.service
+    enabled: true
+    contents: |-
+      [Unit]
+      Description=Portainer Container
+      After=docker.service
+      Requires=docker.service
+
+      [Service]
+      EnvironmentFile=-/etc/sysconfig/variables
+      TimeoutStartSec=0
+      Restart=unless-stopped
+      ExecStartPre=-/usr/bin/docker kill %n
+      ExecStartPre=-/usr/bin/docker rm %n
+      ExecStartPre=-/usr/bin/docker pull portainer/portainer
+      ExecStart=/usr/bin/docker run --rm --name %n -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/portainer:/data --label traefik.enable=true --label traefik.port=9000 --label traefik.frontend.rule=Host:portainer.bcornford.co.uk portainer/portainer --no-analytics --templates=https://raw.githubusercontent.com/bradcornford/coreos/master/docker-templates/portainer.json --host=unix:///var/run/docker.sock
+      ExecStop=/usr/bin/docker stop -t 15 %n
+
+      [Install]
+      WantedBy=multi-user.target
+      WantedBy=docker.service

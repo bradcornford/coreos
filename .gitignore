@@ -1,0 +1,7 @@
+# ignore Editor files
+*.sublime-project
+*.sublime-workspace
+*.komodoproject
+.idea/
+*.iml
+.DS_Store

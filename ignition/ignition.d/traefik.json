@@ -1,0 +1,52 @@
+{
+  "ignition": {
+    "config": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "2.2.0"
+  },
+  "networkd": {},
+  "passwd": {},
+  "storage": {
+    "files": [
+      {
+        "filesystem": "root",
+        "path": "/opt/traefik/traefik.toml",
+        "contents": {
+          "source": "data:,debug%20%3D%20false%0AlogLevel%20%3D%20%22ERROR%22%0AInsecureSkipVerify%20%3D%20true%0AdefaultEntryPoints%20%3D%20%5B%22https%22%2C%20%22http%22%5D%0A%0A%5Bapi%5D%0AentryPoint%20%3D%20%22traefik%22%0Adashboard%20%3D%20true%0Aaddress%20%3D%20%22%3A8080%22%0AusersFile%20%3D%20%22%2Fetc%2Ftraefik%2F.htpasswd%22%0A%0A%5BentryPoints%5D%0A%20%20%5BentryPoints.http%5D%0A%20%20%20%20address%20%3D%20%22%3A80%22%0A%20%20%20%20%5BentryPoints.http.redirect%5D%0A%20%20%20%20%20%20entryPoint%20%3D%20%22https%22%0A%20%20%5BentryPoints.https%5D%0A%20%20%20%20address%20%3D%20%22%3A443%22%0A%20%20%20%20%5BentryPoints.https.tls%5D%0A%0A%5Bfile%5D%0Awatch%20%3D%20true%0Afilename%20%3D%20%22%2Fetc%2Ftraefik%2Frules.toml%22%0A%0A%5Bretry%5D%0A%0A%5Bacme%5D%0A%20%20email%20%3D%20%22bradcornford%40hotmail.co.uk%22%0A%20%20storage%20%3D%20%22%2Fetc%2Ftraefik%2Facme.json%22%0A%20%20entryPoint%20%3D%20%22https%22%0A%20%20acmeLogging%20%3D%20true%0A%20%20%5Bacme.dnsChallenge%5D%0A%20%20%20%20provider%20%3D%20%22godaddy%22%0A%20%20%20%20delayBeforeCheck%20%3D%2090%0A%20%20%5B%5Bacme.domains%5D%5D%0A%20%20%20%20main%20%3D%20%22*.bcornford.co.uk%22%0A%20%20%20%20sans%20%3D%20%5B%22bcornford.co.uk%22%5D%0A%0A%5Bdocker%5D%0Aendpoint%20%3D%20%22unix%3A%2F%2F%2Fvar%2Frun%2Fdocker.sock%22%0Adomain%20%3D%20%22bcornford.co.uk%22%0Awatch%20%3D%20true%0Aexposedbydefault%20%3D%20false",
+          "verification": {}
+        },
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "path": "/opt/traefik/rules.toml",
+        "contents": {
+          "source": "data:,%5Bbackends%5D%0A%20%20%5Bbackends.backend-router%5D%0A%20%20%20%20%5Bbackends.backend-router.servers%5D%0A%20%20%20%20%20%20%5Bbackends.backend-router.servers.server-router-ext%5D%0A%20%20%20%20%20%20%20%20url%20%3D%20%22http%3A%2F%2F192.168.0.1%22%0A%20%20%20%20%20%20%20%20weight%20%3D%200%0A%0A%20%20%5Bbackends.backend-unificloudkey%5D%0A%20%20%20%20%5Bbackends.backend-unificloudkey.servers%5D%0A%20%20%20%20%20%20%5Bbackends.backend-unificloudkey.servers.server-unificloudkey-ext%5D%0A%20%20%20%20%20%20%20%20url%20%3D%20%22https%3A%2F%2Funifi-cloudKey%3A8443%22%0A%20%20%20%20%20%20%20%20weight%20%3D%200%0A%0A%20%20%5Bbackends.backend-piserver%5D%0A%20%20%20%20%5Bbackends.backend-piserver.servers%5D%0A%20%20%20%20%20%20%5Bbackends.backend-piserver.servers.server-piserver-ext%5D%0A%20%20%20%20%20%20%20%20url%20%3D%20%22http%3A%2F%2Fpi-server%3A88%2Fadmin%22%0A%20%20%20%20%20%20%20%20weight%20%3D%200%0A%0A%20%20%5Bbackends.backend-dellserver%5D%0A%20%20%20%20%5Bbackends.backend-dellserver.servers%5D%0A%20%20%20%20%20%20%5Bbackends.backend-dellserver.servers.server-dellserver-ext%5D%0A%20%20%20%20%20%20%20%20url%20%3D%20%22https%3A%2F%2Fidrac-hm5n35j%22%0A%20%20%20%20%20%20%20%20weight%20%3D%200%0A%0A%20%20%5Bbackends.backend-zyxelnas%5D%0A%20%20%20%20%5Bbackends.backend-zyxelnas.servers%5D%0A%20%20%20%20%20%20%5Bbackends.backend-zyxelnas.servers.server-zyxelnas-ext%5D%0A%20%20%20%20%20%20%20%20url%20%3D%20%22http%3A%2F%2Fzyxel-nas%22%0A%20%20%20%20%20%20%20%20weight%20%3D%200%0A%0A%20%20%5Bbackends.backend-buffalonas%5D%0A%20%20%20%20%5Bbackends.backend-buffalonas.servers%5D%0A%20%20%20%20%20%20%5Bbackends.backend-buffalonas.servers.server-buffalonas-ext%5D%0A%20%20%20%20%20%20%20%20url%20%3D%20%22http%3A%2F%2Fbuffalo-nas%22%0A%20%20%20%20%20%20%20%20weight%20%3D%200%0A%0A%5Bfrontends%5D%0A%20%20%5Bfrontends.frontend-router%5D%0A%20%20%20%20backend%20%3D%20%22backend-router%22%0A%20%20%20%20passHostHeader%20%3D%20true%0A%20%20%20%20%5Bfrontends.frontend-router.routes%5D%0A%20%20%20%20%20%20%5Bfrontends.frontend-router.routes.route-router-ext%5D%0A%20%20%20%20%20%20%20%20rule%20%3D%20%22Host%3Arouter.bcornford.co.uk%22%0A%20%20%20%20%5Bfrontends.frontend-router.auth%5D%0A%20%20%20%20%20%20headerField%20%3D%20%22X-WebAuth-User%22%0A%20%20%20%20%20%20%5Bfrontends.frontend-router.auth.basic%5D%0A%20%20%20%20%20%20%20%20removeHeader%20%3D%20true%0A%20%20%20%20%20%20%20%20usersFile%20%3D%20%22%2Fetc%2Ftraefik%2F.htpasswd%22%0A%0A%20%20%5Bfrontends.frontend-piserver%5D%0A%20%20%20%20backend%20%3D%20%22backend-piserver%22%0A%20%20%20%20passHostHeader%20%3D%20true%0A%20%20%20%20%5Bfrontends.frontend-piserver.routes%5D%0A%20%20%20%20%20%20%5Bfrontends.frontend-piserver.routes.route-piserver-ext%5D%0A%20%20%20%20%20%20%20%20rule%20%3D%20%22Host%3Apihole.bcornford.co.uk%22%0A%20%20%20%20%5Bfrontends.frontend-piserver.auth%5D%0A%20%20%20%20%20%20headerField%20%3D%20%22X-WebAuth-User%22%0A%20%20%20%20%20%20%5Bfrontends.frontend-piserver.auth.basic%5D%0A%20%20%20%20%20%20%20%20removeHeader%20%3D%20true%0A%20%20%20%20%20%20%20%20usersFile%20%3D%20%22%2Fetc%2Ftraefik%2F.htpasswd%22%0A%0A%20%20%5Bfrontends.frontend-unificloudkey%5D%0A%20%20%20%20backend%20%3D%20%22backend-unificloudkey%22%0A%20%20%20%20passHostHeader%20%3D%20true%0A%20%20%20%20%5Bfrontends.frontend-unificloudkey.routes%5D%0A%20%20%20%20%20%20%5Bfrontends.frontend-unificloudkey.routes.route-unificloudkey-ext%5D%0A%20%20%20%20%20%20%20%20rule%20%3D%20%22Host%3Aunifi.bcornford.co.uk%22%0A%20%20%20%20%5Bfrontends.frontend-unificloudkey.auth%5D%0A%20%20%20%20%20%20headerField%20%3D%20%22X-WebAuth-User%22%0A%20%20%20%20%20%20%5Bfrontends.frontend-unificloudkey.auth.basic%5D%0A%20%20%20%20%20%20%20%20removeHeader%20%3D%20true%0A%20%20%20%20%20%20%20%20usersFile%20%3D%20%22%2Fetc%2Ftraefik%2F.htpasswd%22%0A%0A%20%20%5Bfrontends.frontend-dellserver%5D%0A%20%20%20%20backend%20%3D%20%22backend-dellserver%22%0A%20%20%20%20passHostHeader%20%3D%20true%0A%20%20%20%20%5Bfrontends.frontend-dellserver.routes%5D%0A%20%20%20%20%20%20%5Bfrontends.frontend-dellserver.routes.route-dellserver-ext%5D%0A%20%20%20%20%20%20%20%20rule%20%3D%20%22Host%3Adell.bcornford.co.uk%22%0A%20%20%20%20%5Bfrontends.frontend-dellserver.auth%5D%0A%20%20%20%20%20%20headerField%20%3D%20%22X-WebAuth-User%22%0A%20%20%20%20%20%20%5Bfrontends.frontend-dellserver.auth.basic%5D%0A%20%20%20%20%20%20%20%20removeHeader%20%3D%20true%0A%20%20%20%20%20%20%20%20usersFile%20%3D%20%22%2Fetc%2Ftraefik%2F.htpasswd%22%0A%0A%20%20%5Bfrontends.frontend-zyxelnas%5D%0A%20%20%20%20backend%20%3D%20%22backend-zyxelnas%22%0A%20%20%20%20passHostHeader%20%3D%20true%0A%20%20%20%20%5Bfrontends.frontend-zyxelnas.routes%5D%0A%20%20%20%20%20%20%5Bfrontends.frontend-zyxelnas.routes.route-zyxelnas-ext%5D%0A%20%20%20%20%20%20%20%20rule%20%3D%20%22Host%3Azyxel.bcornford.co.uk%22%0A%20%20%20%20%5Bfrontends.frontend-zyxelnas.auth%5D%0A%20%20%20%20%20%20headerField%20%3D%20%22X-WebAuth-User%22%0A%20%20%20%20%20%20%5Bfrontends.frontend-zyxelnas.auth.basic%5D%0A%20%20%20%20%20%20%20%20removeHeader%20%3D%20true%0A%20%20%20%20%20%20%20%20usersFile%20%3D%20%22%2Fetc%2Ftraefik%2F.htpasswd%22%0A%0A%20%20%5Bfrontends.frontend-buffalonas%5D%0A%20%20%20%20backend%20%3D%20%22backend-buffalonas%22%0A%20%20%20%20passHostHeader%20%3D%20true%0A%20%20%20%20%5Bfrontends.frontend-buffalonas.routes%5D%0A%20%20%20%20%20%20%5Bfrontends.frontend-buffalonas.routes.route-buffalonas-ext%5D%0A%20%20%20%20%20%20%20%20rule%20%3D%20%22Host%3Abuffalo.bcornford.co.uk%22%0A%20%20%20%20%5Bfrontends.frontend-buffalonas.auth%5D%0A%20%20%20%20%20%20headerField%20%3D%20%22X-WebAuth-User%22%0A%20%20%20%20%20%20%5Bfrontends.frontend-buffalonas.auth.basic%5D%0A%20%20%20%20%20%20%20%20removeHeader%20%3D%20true%0A%20%20%20%20%20%20%20%20usersFile%20%3D%20%22%2Fetc%2Ftraefik%2F.htpasswd%22",
+          "verification": {}
+        },
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "path": "/opt/traefik/acme.json",
+        "contents": {
+          "source": "data:,",
+          "verification": {}
+        },
+        "mode": 384
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Unit]\nDescription=Traefik Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nEnvironmentFile=-/etc/sysconfig/variables\nTimeoutStartSec=0\nRestart=unless-stopped\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull traefik:alpine\nExecStart=/usr/bin/docker run --rm --name %n -p 80:80 -p 443:443 -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock:ro -v /opt/traefik/traefik.toml:/etc/traefik/traefik.toml -v /opt/traefik/rules.toml:/etc/traefik/rules.toml -v /opt/traefik/acme.json:/etc/traefik/acme.json -v /etc/sysconfig/users:/etc/traefik/.htpasswd --env-file /etc/sysconfig/variables --label traefik.enable=true --label traefik.port=9000 --label traefik.frontend.rule=Host:traefik.bcornford.co.uk traefik:alpine\nExecStop=/usr/bin/docker stop -t 15 %n\n\n[Install]\nWantedBy=multi-user.target\nWantedBy=docker.service",
+        "enabled": true,
+        "name": "traefik.service"
+      }
+    ]
+  }
+}
