@@ -1,0 +1,22 @@
+{
+  "ignition": {
+    "config": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "2.2.0"
+  },
+  "networkd": {},
+  "passwd": {},
+  "storage": {},
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Unit]\nDescription=Nvidia Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nTimeoutStartSec=20m\nEnvironmentFile=/etc/os-release\nExecStartPre=-/usr/bin/docker rm nvidia-driver\nExecStartPre=/usr/bin/docker run --rm --privileged --volume /:/rootfs/ srcd/coreos-nvidia\nExecStart=/usr/bin/docker run --rm --name nvidia-driver srcd/coreos-nvidia sleep infinity\nExecStop=/usr/bin/docker stop nvidia-driver\nExecStop=-/sbin/rmmod nvidia_uvm nvidia\n\n[Install]\nWantedBy=multi-user.target",
+        "enabled": true,
+        "name": "nvidia.service"
+      }
+    ]
+  }
+}

@@ -13,7 +13,7 @@
   "systemd": {
     "units": [
       {
-        "contents": "[Unit]\nDescription=Netdata Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nEnvironmentFile=-/etc/sysconfig/variables\nTimeoutStartSec=0\nRestart=unless-stopped\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull netdata/netdata\nExecStart=/usr/bin/docker run --rm --hostname %n --name %n -p 19999:19999 -v /proc:/host/proc:ro -v /sys:/host/sys:ro -v /var/run/docker.sock:/var/run/docker.sock:ro --cap-add SYS_PTRACE --security-opt apparmor=unconfined --env PGID=${DOCKER_PGID} --label traefik.enable=true --label traefik.port=19999 --label traefik.frontend.rule=Host:netdata.bcornford.co.uk netdata/netdata\nExecStop=/usr/bin/docker stop -t 15 %n\n\n[Install]\nWantedBy=multi-user.target\nWantedBy=docker.service",
+        "contents": "[Unit]\nDescription=Netdata Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nTimeoutStartSec=0\nRestart=unless-stopped\nEnvironmentFile=/etc/sysconfig/variables\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull netdata/netdata\nExecStart=/usr/bin/docker run --rm --hostname %n --name %n -p 19999:19999 -v /proc:/host/proc:ro -v /sys:/host/sys:ro -v /var/run/docker.sock:/var/run/docker.sock:ro --cap-add SYS_PTRACE --security-opt apparmor=unconfined --env PGID=${DOCKER_PGID} --label traefik.enable=true --label traefik.port=19999 --label traefik.frontend.rule=Host:netdata.bcornford.co.uk netdata/netdata\nExecStop=/usr/bin/docker stop -t 15 %n\n\n[Install]\nWantedBy=multi-user.target\nWantedBy=docker.service",
         "enabled": true,
         "name": "netdata.service"
       }

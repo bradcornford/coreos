@@ -183,9 +183,9 @@ systemd:
       Requires=docker.service
 
       [Service]
-      EnvironmentFile=-/etc/sysconfig/variables
       TimeoutStartSec=0
       Restart=unless-stopped
+      EnvironmentFile=/etc/sysconfig/variables
       ExecStartPre=-/usr/bin/docker kill %n
       ExecStartPre=-/usr/bin/docker rm %n
       ExecStartPre=-/usr/bin/docker pull traefik:alpine

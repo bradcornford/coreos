@@ -111,6 +111,7 @@
       "Downloaders",
       "Tools"
     ],
+    "runtime": "nvidia",
     "ports": [
       "9117/tcp"
     ],
@@ -140,6 +141,12 @@
         "name": "PUID",
         "label": "PUID",
         "default": "15000",
+        "preset": true
+      },
+      {
+        "name": "NVIDIA_VISIBLE_DEVICES",
+        "label": "NVIDIA_VISIBLE_DEVICES",
+        "default": "all",
         "preset": true
       }
     ],
